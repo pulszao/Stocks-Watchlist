@@ -1,0 +1,74 @@
+{% extends "stock_manager/layout.html" %}
+
+{% block script %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    $(window).on("load", function () {
+        userAction();
+        document.getElementById('text').innerHTML = 'Please, seach for a stock.'
+    })
+
+    const userAction = async () => {
+        const response = await fetch('https://cloud.iexapis.com/stable/stock/market/batch?symbols={{stock}}&types=chart&token=pk_6e745d9628ba4988b0c47b5bd151622e');
+        const info = await response.json();
+        if ((info['{{stock|upper}}']['chart']).length == 0) {
+            document.getElementById('text').innerHTML = 'This stock ({{stock|upper}}) doesn\'t exist!';
+        } else {
+            document.getElementById('text').innerHTML = '';
+
+            var variation = info['{{stock|upper}}']['chart']
+            var data = [];
+
+            for (let index = 0; index < variation.length; index++) {
+                element = [];
+                i = variation[index];
+
+                element = [i['date'], i['low'], i['open'], i['close'], i['high']];
+
+                data.push(element);
+            }
+            var data = google.visualization.arrayToDataTable(data, true);
+
+            var options = {
+                legend: 'none',
+                title: "Monthly '{{ stock|upper }}' graphic.",
+                titleTextStyle: {
+                    color: '#000000',
+                    fontSize: 17,
+                },
+            };
+
+            var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+
+        }
+
+    }
+</script>
+{% endblock %}
+
+{% block body %}
+<h1>Take a look!</h1>
+<br>
+<div class="container">
+    <form action="{% url 'chart' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Stock" name="stock" autocomplete="off" required>
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-secondary" title="add_stock">Search</button>
+            </div>
+        </div>
+    </form><br><br>
+</div>
+
+{% endblock %}
+
+{%block content%}
+<p id="text" style="text-align: center; font-size: 28px; font-weight: 400;"></p>
+<div id="chart_div" class="chart"></div>
+{%endblock content%}

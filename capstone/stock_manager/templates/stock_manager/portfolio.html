@@ -1,0 +1,44 @@
+{% extends "stock_manager/layout.html" %}
+{% load stocks_tags %}
+
+{% block body %}
+<h1>Well done, {{request.user}}!</h1>
+<p>Here you can see your stocks performance.</p><br>
+
+{% if stocks %}
+<table class="table table-striped responsive-table">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Position</th>
+            <th>Shares</th>
+            <th>Price(actual)</th>
+            <th>Avarage price</th>
+            <th>Rentability</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in stocks.items %}
+            <tr>
+                <td><b>{{ i|first }}</b></td>
+                {% for x in i %}
+                {% if x.total %}
+                    <td>U$D {{ x.total | floatformat:2 }}</td>
+                    <td>{{ x.shares }}</td>
+                    <td>U$D {{ x.actual_price | floatformat:2 }}</td>
+                    <td>U$D {{ x.avarage | floatformat:2 }}</td>
+                    {% if x.actual_price >= x.avarage %}
+                    <td style="color: green;">+{{ x.actual_price | rentability:x.avarage | floatformat:2 }}%</td>
+                    {% else %}
+                    <td style="color: red;">{{ x.actual_price | rentability:x.avarage | floatformat:2 }}%</td>
+                    {% endif %}
+                {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p style="text-align: center; font-size: 28px; font-weight: 400;">You have no stocks, yet.</p>
+{% endif %}
+{% endblock %}

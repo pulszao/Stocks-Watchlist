@@ -1,0 +1,94 @@
+{% extends "stock_manager/layout.html" %}
+{% load stocks_tags %}
+
+{% block script %}
+<script>
+  $(document).ready(function () {
+    $("#sortable").sortable();
+    $("#sortable").disableSelection();
+  });
+</script>
+{% endblock %}
+
+{% block body %}
+<h1>Keep your eyes open, {{request.user}}!</h1>
+<p>Add here stocks that interests you.</p><br>
+
+<form action="{% url 'watchlist' %}" method="post">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col-md-3">
+      <input type="text" class="form-control" placeholder="Stock" name="stock" maxlength="5" autocomplete="off" required>
+    </div>
+    <div class="col-md-1">
+      <button type="submit" class="btn btn-secondary" title="add_stock">Add</button>
+    </div>
+  </div>
+</form><br><br>
+
+{% if have_stocks %}
+<div class="page-content page-container" id="page-content">
+  <div class="row container d-flex justify-content-center">
+    <div style="min-width: 280px;" class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Watchlist</h5>
+        </div>
+        <div class="card-block">
+          <div style="margin-left: 0px; margin-right: 0px;" class="row" id="sortable">
+            {% for stocks in stocks.items %}
+            <div style="min-width: 250px;" class="col-md-3">
+              <div class="card-sub">
+                <div class="card-blk">
+                    <div style="float: right">
+                        <a class="btn btn-outline-danger btn-sm  hide" data-toggle="modal" href="#delModal{{stocks|first}}">X</a>
+                    </div>
+                  <h4 class="card-title">{{ stocks|first }}</h4>
+                  <nobr>
+                  {% for i in stocks %}
+                    {% if i.quote.latestPrice %}
+                      <p><a style="font-size: 18; font-weight: 600;">Price:</a> U$D {{ i.quote.latestPrice | floatformat:2 }}</p> 
+                    {% endif %}
+                    {% if i.quote.changePercent %}
+                    <a style="font-size: 18; font-weight: 600;">Daily variation:</a>
+                      {% if i.quote.changePercent >= 0 %}
+                      <nobr style="color: green; font-size: 15px; font-weight: 500;"> +{{ i.quote.changePercent|multiply:100 | floatformat:2}}%</nobr>
+                      {% else %}
+                      <nobr style="color: red;  font-size: 15px; font-weight: 500;"> {{ i.quote.changePercent|multiply:100 | floatformat:2}}%</nobr>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="delModal{{stocks|first}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Delete '{{ stocks|first }}' from your watchlist?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger"><a class="btn_logout"
+                                    href="{% url 'remove_watchlist' stocks|first %}">Delete</a></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<p style="text-align: center; font-size: 28px; font-weight: 400;">No stock was added on watchlist.</p>
+{% endif %}
+
+{% endblock %}

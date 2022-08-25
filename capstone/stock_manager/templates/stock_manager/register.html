@@ -1,0 +1,38 @@
+{% extends "stock_manager/layout.html" %}
+
+{% block login %}
+
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+    
+    <div class="login">
+        <h2 class="text_center">Register</h2><br>
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" autofocus type="text" name="username" placeholder="Username" autocomplete="off" required> 
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="email" name="email" placeholder="Email Address" autocomplete="off" required>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password" placeholder="Password" autocomplete="off" required>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password" autocomplete="off" required>
+            </div>
+            <input class="btn btn-primary btn_center" type="submit" value="Register">
+        </form>
+    </div>
+
+    <br><p class="text_center">Already have an account? <a href="{% url 'login' %}">Log In here.</a></p>
+
+{% endblock %}
+
+{% block footer %}
+<footer class="footer">
+    Data provided for free by <a href="https://iextrading.com/developer">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
+</footer>
+{% endblock %}

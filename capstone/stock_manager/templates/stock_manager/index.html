@@ -1,0 +1,44 @@
+{% extends "stock_manager/layout.html" %}
+{% load stocks_tags %}
+
+{% block stocks %}
+<div class="slider">
+    <div class="slide-track">
+        {% for i in a %}
+        {% for stocks in stocks.items %}
+        <div class="slide">
+            <b>{{ stocks|first }}</b>
+            {% for i in stocks %}
+                {{ i.quote.latestPrice }}
+                {% if i.quote.changePercent %}
+                    {% if i.quote.changePercent >= 0 %}
+                        <nobr style="color: green; font-size: 13px;"> +{{ i.quote.changePercent|multiply:100 | floatformat:2}}%</nobr>
+                    {% else %}
+                        <nobr style="color: red;  font-size: 13px;"> {{ i.quote.changePercent|multiply:100 | floatformat:2}}%</nobr>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+{% block body %}
+<h1>Welcome back, {{request.user}}!</h1>
+
+<div class="row" style="margin-top: 30px;">
+{% for new in news.articles %}
+<div class="card" style="width: 18rem; margin: 30px;">
+    <img src="{{ new.urlToImage }}" class="card-img-top">
+    <div class="card-body">
+      <b style="color: grey;">{{ new.source.name }}</b>
+      <p class="mt-0"><a href="{{ new.url }}" style="color: black;">{{ new.title }}</a></p>
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+{% endblock %}

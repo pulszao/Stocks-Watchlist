@@ -1,0 +1,244 @@
+.text_center{
+    text-align: center;
+}
+.btn_center{
+    margin-left: 42%;
+}
+.btn_logout, .btn_logout:hover{
+    color: white;
+    text-decoration: none;
+}
+.footer {
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    padding: 7px;
+    width: 100%;
+    color: black;
+    background-color: lightgrey;
+    opacity: 80%;
+}
+.index_body{
+	padding: 30px;
+	margin-top: 20px;
+}
+// carroussel
+#sliding{
+    background-color: lightcoral;
+    opacity: 90%;
+    color: white;
+    font-weight: 500;
+    animation-name: slide;
+    animation-duration: 25s;
+    animation-play-state: running;
+}
+@keyframes slide{
+	0%{
+		transform:translate(0,0)
+	}
+	100%{
+		transform:translate(-100%,0)
+	}
+}
+
+@mixin white-gradient {
+	background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+}
+
+$animationSpeed: 40s;
+
+// Animation
+@keyframes scroll {
+	0% { transform: translateX(0); }
+	100% { transform: translateX(calc(-190px * 4))}
+}
+
+.slider {
+	background: white;
+	box-shadow: 0 10px 20px -5px rgba(0, 0, 0, .125);
+	height: 50px;
+	margin: auto;
+	overflow:hidden;
+	position: relative;
+	width: 100%;
+	
+	&::before,
+	&::after {
+		@include white-gradient;
+		content: "";
+		height: 50px;
+		position: absolute;
+		width: 100px;
+		z-index: 2;
+	}
+	
+	&::after {
+		right: 0;
+		top: 0;
+		transform: rotateZ(180deg);
+	}
+
+	&::before {
+		left: 0;
+		top: 0;
+	}
+	
+	.slide-track {
+		animation: scroll $animationSpeed linear infinite;
+		display: flex;
+		width: calc(190px * 20);
+	}
+	
+	.slide {
+		padding: 12px;
+		height: 50px;
+		width: 190px;
+		text-align: center;
+		border-right: lightgray 1px solid;
+	}
+}
+
+// draggable cards
+.stretch-card>.card {
+    width: 100%;
+    min-width: 100%
+}
+
+.flex {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto
+}
+
+@media (min-width:771px) {
+    .padding {
+        padding: 1.5rem
+    }
+	.login{
+		padding: 12% 25%;
+	}
+	.chart {
+		width: 1000px; height: 500px;
+	}
+}
+
+@media (max-width:770px) {
+    .padding {
+        padding: 1rem
+    }
+	.login{
+		padding: 30px 60px;
+	}
+	.responsive-table {
+		display: block;
+		width: 100%;
+		overflow-x: auto;
+	}
+	.card-blk {
+		padding: 20px;
+    	padding-right: 0px;
+		background-color: white;
+		margin-bottom: 20px;
+		min-width: 200px;
+	}
+	.chart {
+		width: 100%;
+		font-size: small;
+	}
+}
+
+td, th {
+	text-align: center;
+}
+
+.card-blk {
+	padding: 20px;
+	padding-right: 0px;
+	background-color: white;
+	margin: 20px;
+}
+
+.card-sub {
+    cursor: move;
+    border: none;
+    -webkit-box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05)
+	
+}
+
+.card-img-top {
+    width: 100%;
+    height: 180px;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px)
+}
+
+.delete-watchlist{
+	text-align: right;
+	float: right;
+	padding-top: 0%;
+	padding-right: 15px;
+	color: red;
+	font-weight: bold;
+	height: 20px;
+	width: 20px;
+}
+
+// loadig page
+.content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width:100%;
+	height:100%;
+}
+
+.loader-wrapper {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: white;
+	display:flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.loader {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	position: relative;
+	border: 4px solid #242f3f;
+	animation: loader 2s infinite ease;
+}
+
+.loader-inner {
+	vertical-align: top;
+	display: inline-block;
+	width: 100%;
+	background-color: #242f3f;
+	animation: loader-inner 2s infinite ease-in;
+}
+
+@keyframes loader {
+	0% { transform: rotate(0deg);}
+	25% { transform: rotate(180deg);}
+	50% { transform: rotate(180deg);}
+	75% { transform: rotate(360deg);}
+	100% { transform: rotate(360deg);}
+}
+
+@keyframes loader-inner {
+	0% { height: 0%;}
+	25% { height: 0%;}
+	50% { height: 100%;}
+	75% { height: 100%;}
+	100% { height: 0%;}
+}
+
+.news_card{
+	margin-bottom: 50px;
+	padding: 10px;
+}
